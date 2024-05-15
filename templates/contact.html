@@ -1,0 +1,136 @@
+<!-- contact.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - BillSwift</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'ed6aa35c-7713-4189-88cc-c85413b3b927.png' %}">
+  <link rel="stylesheet" href="../static/styles.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #a2d3e8;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav li {
+      display: flex;
+      align-items: center;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: white;
+    }
+
+    .container {
+      padding: 20px;
+      margin-top: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h2 {
+      color: #3498db;
+    }
+
+    table {
+      width: 100%;
+      max-width: 600px; /* Set a maximum width */
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #333;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='/'">
+      <img class="logo-img" src="{% static 'BillSwift logo new.png' %}" alt="BillSwift Logo">
+    </div>
+    <nav>
+      <ul>
+        <li><button class="button button1" onclick="window.location.href='/about'">About</button></li>
+        <li><button class="button button2" onclick="window.location.href='/contact'">Contact Us</button></li>
+        <li><button class="button button3" onclick="window.location.href='/login'">Login</button></li>
+        <li><button class="button button4" onclick="window.location.href='/signup'">Sign Up</button></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    <h2>Contact Details</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Roll Number</th>
+          <th>Mobile No.</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Geetika Mathur</td>
+          <td>20ESKCS092</td>
+          <td>9511581296</td>
+        </tr>
+        <tr>
+          <td>Garvit Mathur</td>
+          <td>20ESKCS088</td>
+          <td>9664392126</td>
+        </tr>
+        <tr>
+          <td>Jatin Yadav</td>
+          <td>20ESKCS109</td>
+          <td>8000696030</td>
+        </tr>
+        <tr>
+          <td>Geetanshikha Gautam</td>
+          <td>20ESKCS091</td>
+          <td>7296899028</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script src="../static/script.js"></script>
+</body>
+</html>

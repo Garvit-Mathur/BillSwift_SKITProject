@@ -1,0 +1,270 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload and Approval</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            padding-top: 50px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #007bff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        #fileList {
+            margin-top: 20px;
+        }
+        .file-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        .file-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        .file-details {
+            display: flex;
+            align-items: center;
+        }
+        .file-details img {
+            width: 40px;
+            height: 40px;
+            margin-right: 15px;
+        }
+        .btn-approve,
+        .btn-reject {
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn-approve:hover {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+        .btn-reject:hover {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        #approvalMessage {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        #filterSortContainer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>File Upload and Approval</h1>
+        
+        <!-- Filter and Sort Controls -->
+        <div id="filterSortContainer">
+            <div>
+                <label for="categoryFilter">Filter by Category:</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="food">Entertainment</option>
+                    <option value="investment">Investment</option>
+                    <option value="grocery">Grocery</option>
+                    <option value="shopping">Shopping</option>
+                    <option value="transport">Transport</option>
+                    <option value="home_utility">Home_utility</option>
+                </select>
+            </div>
+            <div>
+                <label for="sortOrder">Sort by:</label>
+                <select id="sortOrder">
+                    <option value="nameAsc">Name (A-Z)</option>
+                    <option value="nameDesc">Name (Z-A)</option>
+                    <option value="dateAsc">Date (Oldest first)</option>
+                    <option value="dateDesc">Date (Newest first)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Search Input -->
+        <input type="text" id="searchInput" placeholder="Search uploaded bills...">
+
+        <!-- File Upload Form -->
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="fileInput">Select File:</label>
+                <input type="file" name="file" id="fileInput" class="form-control-file">
+            </div>
+            <button type="button" id="uploadBtn" class="btn btn-primary">Upload File</button>
+        </form>
+
+        <!-- Uploaded Files Display -->
+        <div id="fileList"></div>
+    </div>
+
+    <!-- Bootstrap Modal for Approval -->
+    <div class="modal fade" id="approvalModal" tabindex="-1" role="dialog" aria-labelledby="approvalModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p id="approvalMessage"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Handle file upload
+            $('#uploadBtn').click(function() {
+                const fileInput = $('#fileInput')[0].files[0];
+
+                if (fileInput) {
+                    const fileName = fileInput.name;
+
+                    // Append uploaded file to the file list
+                    $('#fileList').append(`
+                        <div class="file-card" data-name="${fileName}">
+                            <div class="file-details">
+                                <img src="{% static 'invoice (1).png' %}" alt="File Icon">
+                                <span>${fileName}</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-success btn-approve">Approve</button>
+                                <button class="btn btn-danger btn-reject ml-2">Reject</button>
+                            </div>
+                        </div>
+                    `);
+
+                    // Clear file input
+                    $('#fileInput').val('');
+                }
+            });
+
+            // Handle approval/rejection button clicks
+            $(document).on('click', '.btn-approve', function() {
+                $('#approvalMessage').text('Bill Approved');
+                $('#approvalModal').modal('show');
+            });
+
+            $(document).on('click', '.btn-reject', function() {
+                $('#approvalMessage').text('Bill Rejected');
+                $('#approvalModal').modal('show');
+            });
+
+            // Handle category filter change
+            $('#categoryFilter').change(function() {
+                const selectedCategory = $(this).val();
+                filterFiles(selectedCategory);
+            });
+
+            // Handle sorting order change
+            $('#sortOrder').change(function() {
+                const sortOrder = $(this).val();
+                sortFiles(sortOrder);
+            });
+
+            // Handle search input
+            $('#searchInput').on('input', function() {
+                const searchText = $(this).val().trim().toLowerCase();
+                searchFiles(searchText);
+            });
+
+            // Function to filter files by category
+            function filterFiles(category) {
+                $('.file-card').each(function() {
+                    const fileName = $(this).data('name');
+                    if (!category || fileName.toLowerCase().includes(category.toLowerCase())) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+
+            // Function to sort files
+            function sortFiles(order) {
+                const fileList = $('#fileList');
+                const files = fileList.children('.file-card').get();
+
+                files.sort(function(a, b) {
+                    const nameA = $(a).data('name').toLowerCase();
+                    const nameB = $(b).data('name').toLowerCase();
+
+                    if (order === 'nameAsc') {
+                        return nameA.localeCompare(nameB);
+                    } else if (order === 'nameDesc') {
+                        return nameB.localeCompare(nameA);
+                    } else if (order === 'dateAsc') {
+                        // Implement date sorting logic if applicable
+                        // For simplicity, we'll use name sorting in this example
+                        return nameA.localeCompare(nameB);
+                    } else if (order === 'dateDesc') {
+                        // Implement date sorting logic if applicable
+                        // For simplicity, we'll use name sorting in this example
+                        return nameB.localeCompare(nameA);
+                    }
+                });
+
+                fileList.empty();
+                $.each(files, function(index, file) {
+                    fileList.append(file);
+                });
+            }
+
+            // Function to search files by name
+            function searchFiles(searchText) {
+                $('.file-card').each(function() {
+                    const fileName = $(this).data('name').toLowerCase();
+                    if (fileName.includes(searchText)) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

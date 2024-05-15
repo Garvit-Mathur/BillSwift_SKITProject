@@ -1,0 +1,85 @@
+<!-- about.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About BillSwift</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'ed6aa35c-7713-4189-88cc-c85413b3b927.png' %}">
+  <link rel="stylesheet" href="../static/styles.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #a2d3e8;
+      color: white;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 80vh;
+    }
+
+    .about-content {
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .about-content h2 {
+      color: #3498db;
+    }
+
+    .about-content p {
+      line-height: 1.6;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='/'">
+      <img class="logo-img" src="{% static 'BillSwift logo new.png' %}" alt="BillSwift Logo">
+    </div>
+    <nav>
+      <ul>
+        <li><button class="button button1" onclick="window.location.href='/about'">About</button></li>
+        <li><button class="button button2" onclick="window.location.href='/contact'">Contact Us</button></li>
+        <li><button class="button button3" onclick="window.location.href='/login'">Login</button></li>
+        <li><button class="button button4" onclick="window.location.href='/signup'">Sign Up</button></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    <div class="about-content">
+      <h2>About BillSwift</h2>
+      <p>
+        BillSwift is designed to revolutionize expense management within organizations. This system simplifies the process for employees to submit bills of varying types and amounts, assigning them to their respective managers. BS implements a streamlined workflow, offering bill owners real-time tracking of their submissions.
+        Automation is at the core of BS, ensuring bills follow predefined rules and hierarchies for efficient routing to the appropriate managers and reviewers. Email notifications keep stakeholders informed about pending bills, approval requests, and status updates.
+        BS significantly enhances efficiency, accuracy, and accountability throughout the organization by centralizing bill submission and approval. It not only expedites the reimbursement process but also improves the overall employee experience and financial control.
+        In conclusion, the Bill Swift project addresses the pressing need for a modernized and efficient expense management solution, providing heightened visibility, automation, and communication to optimize financial workflows within the organization.
+      </p>
+    </div>
+  </div>
+  <script src="../static/script.js"></script>
+</body>
+</html>

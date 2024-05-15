@@ -1,0 +1,78 @@
+<!-- index.html -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BillSwift</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'ed6aa35c-7713-4189-88cc-c85413b3b927.png' %}">
+  <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='index'"><a href = "/"><img class="logo-img" src="{% static 'BillSwift logo new.png' %}" alt="BillSwift Logo"></a>
+    </div>
+    <nav>
+   
+      <ul>
+        <li><button class="button button1" onclick="window.location.href='about'">About</button></li>
+        <li><button class="button button2" onclick="window.location.href='contact'">Contact Us</button></li>
+        <li><button class="button button3" onclick="window.location.href='login'">Login</button></li>
+        <li><button class="button button4" onclick="window.location.href='signup'">Sign Up</button></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="container_1">
+    <div class="left-section_1">
+      <h1 class="heading">Revolutionize Your Expense Management</h1>
+      <p class="paragraph">Discover a smarter way to handle expenses with BillSwift.BillSwift revolutionizes expense management, 
+        simplifying bill submissions and tracking for employees while automating routing and notifications. 
+        It enhances efficiency, accuracy, and accountability through centralized processes, expediting reimbursements and improving the employee experience. 
+        BS offers heightened visibility, automation, and communication, addressing the pressing need for modernized financial workflows within organizations.
+      </p>
+    </div>
+    <div class="right-section_1">
+      <video muted autoplay playsinline loop style="max-width: 100%; height: auto;">
+        <source src="https://billingplatform.com/wp-content/uploads/2022/07/0_Hero-MainComp.mp4" type="video/mp4" codecs="hvc1">
+        <!-- Add additional source tags for different video formats if needed -->
+      </video>
+    </div>
+  </div>
+  
+  <div class="container">
+    <div class="left-section">
+      <img class="bill-img" src="{% static 'paying-bills-concept-illustration_114360-19357.avif' %}" alt="Bill Image">
+    </div>
+    <div class="right-section">
+      
+      <!-- Add additional content here -->
+      <div class="qualities">
+        <div class="quality">
+          <img class="quality-icon" src="{% static 'simplified.jpg' %}" alt="Quality 1">
+          <p>Simplified bill submission</p>
+        </div>
+        <div class="quality">
+          <img class="quality-icon" src="{% static 'time tracking.png' %}" alt="Quality 2">
+          <p>Real-time tracking</p>
+        </div>
+        <div class="quality">
+          <img class="quality-icon" src="{% static 'automated workflow.jpg' %}" alt="Quality 3">
+          <p>Automated workflow</p>
+        </div>
+        <div class="quality">
+          <img class="quality-icon" src="{% static 'email notifications.png' %}" alt="Quality 4">
+          <p>Email notifications</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="LearnMoreContainer">
+       <h1 class="heading">Are you ready to learn more ?</h1>
+       <button class="tryButton"onclick="window.location.href='/signup'">Try BillSwift</button>
+  </div>
+  <script src="../static/script.js"></script>
+</body>
+</html>

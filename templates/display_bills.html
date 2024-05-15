@@ -1,0 +1,967 @@
+{% comment %} {% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Bills</title>
+    <style>
+        /* Reset default margins and paddings */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Table styles */
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .bill-table th, .bill-table td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        .bill-table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Form and button styles */
+        .action-buttons {
+            white-space: nowrap; /* Prevent button wrapping */
+        }
+
+        .action-form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .approve-btn, .reject-btn {
+            background-color: #28a745; /* Green for approve, Red for reject */
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 5px; /* Add space between rows */
+        }
+
+        .reject-btn {
+            background-color: #dc3545; /* Red */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #007bff; font-weight: bold;">Bill Data</h1>
+        <table class="bill-table">
+            <thead>
+                <tr>
+                    <th>Date of Upload</th>
+                    <th>Email</th>
+                    <th>Date on Bill</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <p style="text-align: center;color: #007bff;">{% for bill in bill_data %}</p>
+                <tr>
+                    <td>{{ bill.date_of_upload }}</td>
+                    <td>{{ bill.email }}</td>
+                    <td>{{ bill.date_on_bill }}</td>
+                    <td>{{ bill.title }}</td>
+                    <td>{{ bill.category }}</td>
+                    <td>{{ bill.price }}</td>
+                    <td>{{ bill.status }}</td>
+                    <td class="action-buttons">
+                        <form action="{% url 'approve_bill' bill.id %}" method="post" class="action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="approve-btn">Approve</button>
+                        </form>
+                        <form action="{% url 'reject_bill' bill.id %}" method="post" class="action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="reject-btn">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                <p style="text-align: center;color: #007bff;">{% endfor %}</p>
+                
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html> {% endcomment %}
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Bills</title>
+    <style>
+        /* Styles remain the same */
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #007bff; font-weight: bold;">Bill Data</h1>
+        
+        <!-- Search Bar -->
+        <input type="text" id="searchInput" onkeyup="searchBills()" placeholder="Search for bills...">
+        
+        <!-- Filter Dropdowns -->
+        <select id="filterStatus">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+        
+        <select id="filterCategory">
+            <option value="">All Categories</option>
+            <option value="Food">Food</option>
+            <option value="Travel">Travel</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Utilities">Entertainment</option>
+            <!-- Add other categories as needed -->
+        </select>
+        
+        <!-- Filter Button -->
+        <button onclick="applyFilters()">Apply Filters</button>
+        
+        <!-- Bills Table -->
+        <table class="bill-table" id="billTable">
+            <thead>
+                <tr>
+                    <th>Date of Upload</th>
+                    <th>Email</th>
+                    <th>Date on Bill</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bill_data %}
+                <tr>
+                    <td>{{ bill.date_of_upload }}</td>
+                    <td>{{ bill.email }}</td>
+                    <td>{{ bill.date_on_bill }}</td>
+                    <td>{{ bill.title }}</td>
+                    <td>{{ bill.category }}</td>
+                    <td>{{ bill.price }}</td>
+                    <td>{{ bill.status }}</td>
+                    <td class="action-buttons">
+                        <form action="{% url 'approve_bill' bill.id %}" method="post" class="action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="approve-btn">Approve</button>
+                        </form>
+                        <form action="{% url 'reject_bill' bill.id %}" method="post" class="action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="reject-btn">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // JavaScript for applying filters
+        function applyFilters() {
+            var status = document.getElementById("filterStatus").value.toUpperCase();
+            var category = document.getElementById("filterCategory").value.toUpperCase().trim();
+            var table = document.getElementById("billTable");
+            var rows = table.getElementsByTagName("tr");
+    
+            // Loop through all table rows
+            for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip header row
+                var row = rows[i];
+                var statusCell = row.cells[6].textContent.toUpperCase(); // Cell containing status
+                var categoryCell = row.cells[4].textContent.toUpperCase().trim(); // Cell containing category
+    
+                // Check if the row matches the filter criteria
+                var statusMatch = (status === "" || statusCell === status);
+                var categoryMatch = (category === "" || categoryCell === category || (category == "ENTERTAINMENT" && categoryCell == "ENTERTAINMENT"));
+    
+                if (statusMatch && categoryMatch) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+        }
+    
+        // JavaScript for searching bills
+        function searchBills() {
+            var input = document.getElementById("searchInput").value.toUpperCase();
+            var table = document.getElementById("billTable");
+            var rows = table.getElementsByTagName("tr");
+    
+            // Loop through all table rows
+            for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip header row
+                var row = rows[i];
+                var titleCell = row.cells[3].textContent.toUpperCase(); // Cell containing title
+    
+                // Check if the title contains the search input
+                if (titleCell.indexOf(input) > -1) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+        }
+    </script>
+    
+    
+    
+    
+
+</body>
+
+</html> {% endcomment %}
+
+{% comment %} 
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Bills</title>
+    <style>
+        /* Reset default margins and paddings */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 1100px;
+            margin: 165px auto 20px auto; /* Adjusted margin */
+            padding: 20px;
+        }
+
+        /* Table container */
+        .table-container {
+            width: 80%;
+             /* Enable horizontal scrolling for small screens */
+        }
+
+        /* Table styles */
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .bill-table th,
+        .bill-table td {
+            padding: 12px;
+            text-align: center; /* Center align table data */
+        }
+
+        .bill-table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Form and button styles */
+        .action-buttons {
+            white-space: nowrap;
+            /* Prevent button wrapping */
+        }
+
+        .action-form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .approve-btn,
+        .reject-btn {
+            background-color: #28a745;
+            /* Green for approve, Red for reject */
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            /* Add space between rows */
+        }
+
+        .reject-btn {
+            background-color: #dc3545;
+            /* Red */
+        }
+
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        /* Popup message styles */
+        .popup p {
+            text-align: center;
+            color: #007bff;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navbar styles */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure it appears above other content */
+            color: rgb(255, 255, 255);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #a2d3e8;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-img {
+            width: 90px;
+            height: 70px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 15px;
+        }
+
+        button {
+            background-color: #04AA6D;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #04AA6D;
+        }
+
+        .button1:hover {
+            background-color: #04AA6D;
+            color: white;
+        }
+
+        .button2 {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+        }
+
+        .button2:hover {
+            background-color: #008CBA;
+            color: white;
+        }
+
+        .button3 {
+            background-color: white;
+            color: black;
+            border: 2px solid #f44336;
+        }
+
+        .button3:hover {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .button4 {
+            background-color: white;
+            color: black;
+            border: 2px solid #e7e7e7;
+        }
+
+        .button4:hover {
+            background-color: #2a9877;
+        }
+
+        #forbill {
+            color: blue;
+            text-align: center;
+        }
+
+        #endfor {
+            color: blue;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" onclick="window.location.href='/';">
+            <img class="logo-img" src="{% static 'BillSwift logo new.png' %}" alt="BillSwift Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><button class="button button1" onclick="window.location.href='/about';">About</button></li>
+                <li><button class="button button2" onclick="window.location.href='/contact';">Contact Us</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 style="text-align: center; color: #007bff; font-weight: bold; ">Bill Data</h1>
+  <div class="table-container">
+            <table class="bill-table">
+                <thead>
+                    <tr>
+                        <th>Date of Upload</th>
+                        <th>Email</th>
+                        <th>Date on Bill</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bill in bill_data %}
+                    <tr>
+                        <td>{{ bill.date_of_upload }}</td>
+                        <td>{{ bill.email }}</td>
+                        <td>{{ bill.date_on_bill }}</td>
+                        <td>{{ bill.title }}</td>
+                        <td>{{ bill.category }}</td>
+                        <td>{{ bill.price }}</td>
+                        <td>{{ bill.status }}</td>
+                        <td class="action-buttons">
+                            <form action="" method="post" class="action-form">
+                                {% csrf_token %}
+                                <button type="button" class="approve-btn">Approve</button>
+                            </form>
+                            <form action="" method="post" class="action-form">
+                                {% csrf_token %}
+                                <button type="button" class="reject-btn">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup" id="popup">
+        <p id="popup-message"></p>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Function to show popup
+        function showPopup(message) {
+            var popup = document.getElementById("popup");
+            var popupMessage = document.getElementById("popup-message");
+            popupMessage.innerText = message;
+            popup.style.display = "flex";
+            // Hide popup after 2 seconds
+            setTimeout(function () {
+                popup.style.display = "none";
+            }, 2000);
+        }
+
+        // Add event listeners to approve buttons
+        var approveButtons = document.querySelectorAll(".approve-btn");
+        approveButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                showPopup("Bill Approved");
+            });
+        });
+
+        // Add event listeners to reject buttons
+        var rejectButtons = document.querySelectorAll(".reject-btn");
+        rejectButtons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                showPopup("Bill Rejected");
+            });
+        });
+    </script>
+</body>
+</html> {% endcomment %}
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Bills</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'ed6aa35c-7713-4189-88cc-c85413b3b927.png' %}">
+    <style>
+        /* Styles remain the same */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        /* Container styles */
+        .container {
+            max-width: 1200px;
+            margin: 165px auto 20px auto; /* Adjusted margin */
+            padding: 20px;
+        }
+
+        /* Table container */
+        .table-container {
+            width: 80%;
+             /* Enable horizontal scrolling for small screens */
+        }
+
+        /* Table styles */
+        .bill-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .bill-table th,
+        .bill-table td {
+            padding: 12px;
+            text-align: center; /* Center align table data */
+        }
+
+        .bill-table th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        /* Form and button styles */
+        .action-buttons {
+            white-space: nowrap;
+            /* Prevent button wrapping */
+        }
+
+        .action-form {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .approve-btn,
+        .reject-btn {
+            background-color: #28a745;
+            /* Green for approve, Red for reject */
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-bottom: 5px;
+            /* Add space between rows */
+        }
+
+        .reject-btn {
+            background-color: #dc3545;
+            /* Red */
+        }
+
+        /* Popup styles */
+        .popup {
+            position: fixed;
+            top: 50px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            display: none;
+        }
+
+        /* Popup message styles */
+        .popup p {
+            text-align: center;
+            color: #007bff;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Navbar styles */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000; /* Ensure it appears above other content */
+            color: rgb(255, 255, 255);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #a2d3e8;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo-img {
+            width: 90px;
+            height: 70px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+
+        nav ul {
+            list-style-type: none;
+            display: flex;
+        }
+
+        nav ul li {
+            margin-right: 15px;
+        }
+
+        button {
+            background-color: #04AA6D;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #04AA6D;
+        }
+
+        .button1:hover {
+            background-color: #04AA6D;
+            color: white;
+        }
+
+        .button2 {
+            background-color: white;
+            color: black;
+            border: 2px solid #008CBA;
+        }
+
+        .button2:hover {
+            background-color: #008CBA;
+            color: white;
+        }
+
+        .button3 {
+            background-color: white;
+            color: black;
+            border: 2px solid #f44336;
+        }
+
+        .button3:hover {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .button4 {
+            background-color: white;
+            color: black;
+            border: 2px solid #e7e7e7;
+        }
+
+        .button4:hover {
+            background-color: #2a9877;
+        }
+
+        #forbill {
+            color: blue;
+            text-align: center;
+        }
+
+        #endfor {
+            color: blue;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo" onclick="window.location.href='/';">
+            <img class="logo-img" src="{% static 'BillSwift logo new.png' %}" alt="BillSwift Logo">
+        </div>
+        <nav>
+            <ul>
+                <li><button class="button button1" onclick="window.location.href='/about';">About</button></li>
+                <li><button class="button button2" onclick="window.location.href='/contact';">Contact Us</button></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        <h1 style="text-align: center; color: #007bff; font-weight: bold;">Bill Data</h1>
+        
+        <!-- Search Bar -->
+        <input style="    width: 395px;height: 31px;margin-right: 383PX;" type="text" id="searchInput" onkeyup="searchBills()" placeholder="Search for bills...">
+        
+        <!-- Filter Dropdowns -->
+        <select id="filterStatus" style="WIDTH: 100PX;HEIGHT: 22PX;MARGIN-RIGHT: 19PX;">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+        </select>
+        
+        <select id="filterCategory" style ="WIDTH: 117PX;HEIGHT: 22PX;MARGIN-RIGHT: 18PX;">
+            <option value="">All Categories</option>
+            <option value="entertainment">Entertainment</option>
+            <option value="investment">Investment</option>
+            <option value="grocery">Grocery</option>
+            <option value="shopping">Shopping</option>
+            <option value="transport">Transport</option>
+            <option value="home_utility">Home Utility</option>
+            <!-- Add other categories as needed -->
+        </select>
+        
+        <!-- Filter Button -->
+        <button onclick="applyFilters()" style ="HEIGHT: 32PX;MARGIN-TOP: 17PX;PADDING: 3PX 13PX;
+    }">Apply Filters</button>
+        
+        <!-- Bills Table -->
+        <table class="bill-table" id="billTable">
+            <thead>
+                <tr>
+                    <th>Date of Upload</th>
+                    <th>Email</th>
+                    <th>Date on Bill</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>View Bill</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bill in bill_data %}
+                <tr>
+                    <td>{{ bill.date_of_upload }}</td>
+                    <td>{{ bill.email }}</td>
+                    <td>{{ bill.date_on_bill }}</td>
+                    <td>{{ bill.title }}</td>
+                    <td>{{ bill.category }}</td>
+                    <td>{{ bill.price }}</td>
+                    <td><a href="{% url 'view_bill_image' bill.id %}" target="_blank" class="btn">View</a></td>
+                    <td>{{ bill.status }}</td>
+                    <td class="action-buttons">
+                        <form action="{% url 'approve_bill' bill.id %}" method="post" class="action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="approve-btn">Approve</button>
+                        </form>
+                        <form action="{% url 'reject_bill' bill.id %}" method="post" class="action-form">
+                            {% csrf_token %}
+                            <button type="submit" class="reject-btn">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% comment %} <script>
+        // JavaScript for applying filters
+        function applyFilters() {
+            var status = document.getElementById("filterStatus").value.toUpperCase();
+            var category = document.getElementById("filterCategory").value.toUpperCase().trim();
+            var table = document.getElementById("billTable");
+            var rows = table.getElementsByTagName("tr");
+    
+            // Loop through all table rows
+            for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip header row
+                var row = rows[i];
+                var statusCell = row.cells[6].textContent.toUpperCase(); // Cell containing status
+                var categoryCell = row.cells[4].textContent.toUpperCase().trim(); // Cell containing category
+    
+                // Check if the row matches the filter criteria
+                var statusMatch = (status === "" || statusCell === status);
+                var categoryMatch = (category === "" || categoryCell === category || (category == "ENTERTAINMENT" && categoryCell == "ENTERTAINMENT"));
+    
+                if (statusMatch && categoryMatch) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+        }
+    
+        // JavaScript for searching bills
+        function searchBills() {
+            var input = document.getElementById("searchInput").value.toUpperCase();
+            var table = document.getElementById("billTable");
+            var rows = table.getElementsByTagName("tr");
+    
+            // Loop through all table rows
+            for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip header row
+                var row = rows[i];
+                var titleCell = row.cells[3].textContent.toUpperCase(); // Cell containing title
+    
+                // Check if the title contains the search input
+                if (titleCell.indexOf(input) > -1) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+        }
+    {% comment %} </script> {% endcomment %}
+   <script>
+        // JavaScript for applying filters
+        function applyFilters() {
+            var status = document.getElementById("filterStatus").value.trim().toLowerCase(); // Convert to uppercase and remove leading/trailing spaces
+            var category = document.getElementById("filterCategory").value.trim().toLowerCase(); // Convert to uppercase and remove leading/trailing spaces
+            var table = document.getElementById("billTable");
+            var rows = table.getElementsByTagName("tr");
+    
+            // Loop through all table rows
+            for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip header row
+                var row = rows[i];
+                var statusCell = row.cells[7].textContent.trim().toLowerCase(); // Cell containing status (index 7)
+                var categoryCell = row.cells[4].textContent.trim().toLowerCase(); // Cell containing category (index 4)
+    
+                // Check if the row matches the filter criteria
+                var statusMatch = (status === "" || statusCell === status);
+                var categoryMatch = (category === "" || categoryCell === category);
+    
+                if (statusMatch && categoryMatch) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+        }
+    
+        // JavaScript for searching bills
+        function searchBills() {
+            var input = document.getElementById("searchInput").value.trim().toUpperCase(); // Convert to uppercase and remove leading/trailing spaces
+            var table = document.getElementById("billTable");
+            var rows = table.getElementsByTagName("tr");
+    
+            // Loop through all table rows
+            for (var i = 1; i < rows.length; i++) { // Start from index 1 to skip header row
+                var row = rows[i];
+                var titleCell = row.cells[3].textContent.trim().toUpperCase(); // Cell containing title (index 3)
+    
+                // Check if the title contains the search input
+                if (titleCell.indexOf(input) > -1) {
+                    row.style.display = ""; // Show the row
+                } else {
+                    row.style.display = "none"; // Hide the row
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!-- login.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - BillSwift</title>
+  <link rel="icon" type="image/x-icon" href="{% static 'ed6aa35c-7713-4189-88cc-c85413b3b927.png' %}">
+  <link rel="stylesheet" href="../static/styles.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: #a2d3e8;
+      color: white;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 20px;
+    }
+
+    nav li {
+      display: flex;
+      align-items: center;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      color: white;
+    }
+
+    .button1 {
+      background-color: white; 
+      color: black; 
+      border: 2px solid #04AA6D;
+    }
+    
+    .button1:hover {
+      background-color: #04AA6D;
+      color: white;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 80vh;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      margin-top: 100px;
+      border: white;
+      border-radius: 20px;
+    
+    }
+
+    form h2 {
+      color: #3498db;
+    }
+
+    form label {
+      display: block;
+      margin: 10px 0;
+    }
+
+    form input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      border-radius: 10px;
+    }
+
+    .primary-btn {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: white; 
+      color: black; 
+      border: 2px solid #3498db;
+    }
+
+    .primary-btn:hover {
+      background-color: #3498db;
+    }
+
+    .login-link {
+      display: flex; 
+      flex-direction: row;
+      color: gray; 
+      margin-top: 100px;
+      align-items: center; /* Center the text and button vertically */
+    } 
+
+    .login-link:before, 
+    .login-link:after { 
+      content: ""; 
+      flex: 1 1; 
+      border-bottom: 1px solid gray; 
+      margin: auto; 
+      margin-left: 8px;
+      margin-right: 8px;
+    } 
+
+   
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo" onclick="window.location.href='/'">
+      <img class="logo-img" src="{% static 'BillSwift logo new.png' %}" alt="BillSwift Logo">
+    </div>
+    <nav>
+      <ul>
+        <li><button class="button button1" onclick="window.location.href='/about'">About</button></li>
+        <li><button class="button button2" onclick="window.location.href='/contact'">Contact Us</button></li>
+        <li><button class="button button3" onclick="window.location.href='/login'">Login</button></li>
+        <li><button class="button button4" onclick="window.location.href='/signup'">Sign Up</button></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="container">
+    {% comment %} <!-- Login form content goes here -->
+    <form id="loginForm">
+      <h2>Login</h2>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter Valid Username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter Valid Password" required>
+
+      <button type="submit" class="primary-btn">Login</button>
+
+      <p class="login-link">Don't have a BillSwift Account?<p>
+        <button class="button1" onclick="window.location.href='signup'" target="_blank">Sign up Now</button>
+    </form> {% endcomment %}
+    <form id="loginForm" method="post">
+      {% csrf_token %}
+      <h2>Login</h2>
+      {% if messages %}
+
+      {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+        {{message}}
+      </div>
+      {% endfor %}
+      {% endif %}
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" placeholder="Enter Valid Username" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" placeholder="Enter Valid Password" required>
+
+      <button type="submit" class="primary-btn">Login</button> <br> <br>
+
+      <p class="login-link">Don't have a BillSwift Account?<p>
+      <button class="button1" onclick="window.location.href='/signup'" target="_blank">Sign up Now</button>
+    </form>
+    
+  </div>
+  <script src="../static/script.js"></script>
+</body>
+</html>
